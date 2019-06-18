@@ -9,25 +9,17 @@ import ru.geekbrains.base.BaseScreen;
 
 public class MenuScreen extends BaseScreen {
 
-    private static final float V_LEN = 0.8f;
-
     private Texture img;
-    private Texture background;
-
     private Vector2 touch;
     private Vector2 pos;
-    private Vector2 v;
-    private Vector2 buf;
 
     @Override
     public void show() {
         super.show();
         img = new Texture("badlogic.jpg");
-        background = new Texture("bg.png");
         touch = new Vector2();
         pos = new Vector2();
-        v = new Vector2();
-        buf = new Vector2();
+        batch.getProjectionMatrix().idt();
     }
 
     @Override
@@ -36,28 +28,19 @@ public class MenuScreen extends BaseScreen {
         Gdx.gl.glClearColor(0.2f, 0.5f, 0.5f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        batch.draw(background, 0, 0);
-        batch.draw(img, pos.x, pos.y);
+        batch.draw(img, -0.5f, -0.5f, 1f, 1f);
         batch.end();
-        buf.set(touch);
-        if (buf.sub(pos).len() > V_LEN) {
-            pos.add(v);
-        } else {
-            pos.set(touch);
-        }
     }
 
     @Override
     public void dispose() {
         img.dispose();
-        background.dispose();
         super.dispose();
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         touch.set(screenX, Gdx.graphics.getHeight() - screenY);
-        v.set(touch.cpy().sub(pos)).setLength(V_LEN);
         return false;
     }
 }
