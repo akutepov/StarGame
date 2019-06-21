@@ -13,27 +13,20 @@ import ru.geekbrains.sprite.Logo;
 
 public class MenuScreen extends BaseScreen {
 
-    private Texture img;
     private Texture bg;
-    private Vector2 pos;
     private Background background;
-    private Logo logo;
 
     @Override
     public void show() {
         super.show();
-        img = new Texture("badlogic.jpg");
-        bg = new Texture("bg.png");
-        pos = new Vector2();
+        bg = new Texture("textures/bg.png");
         background = new Background(new TextureRegion(bg));
-        logo = new Logo(new TextureRegion(img));
     }
 
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
-        logo.resize(worldBounds);
     }
 
     @Override
@@ -44,7 +37,6 @@ public class MenuScreen extends BaseScreen {
     }
 
     public void update(float delta) {
-        logo.update(delta);
     }
 
     public void draw() {
@@ -52,20 +44,17 @@ public class MenuScreen extends BaseScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         background.draw(batch);
-        logo.draw(batch);
         batch.end();
     }
 
     @Override
     public void dispose() {
-        img.dispose();
         bg.dispose();
         super.dispose();
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        logo.touchDown(touch, pointer);
         return false;
     }
 }
