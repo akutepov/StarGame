@@ -18,6 +18,8 @@ import ru.geekbrains.sprite.Star;
 
 public class MenuScreen extends BaseScreen {
 
+    private static final int STAR_COUNT = 256;
+
     private Game game;
 
     private Texture bg;
@@ -27,7 +29,7 @@ public class MenuScreen extends BaseScreen {
     private ButtonExit buttonExit;
     private ButtonPlay buttonPlay;
 
-    private Star star;
+    private Star[] starArray;
 
     public MenuScreen(Game game) {
         this.game = game;
@@ -41,7 +43,10 @@ public class MenuScreen extends BaseScreen {
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
         buttonExit = new ButtonExit(atlas);
         buttonPlay = new ButtonPlay(atlas, game);
-        star = new Star(atlas);
+        starArray = new Star[STAR_COUNT];
+        for (int i = 0; i < starArray.length; i++) {
+            starArray[i] = new Star(atlas);
+        }
     }
 
     @Override
@@ -50,7 +55,9 @@ public class MenuScreen extends BaseScreen {
         background.resize(worldBounds);
         buttonExit.resize(worldBounds);
         buttonPlay.resize(worldBounds);
-        star.resize(worldBounds);
+        for (Star star : starArray) {
+            star.resize(worldBounds);
+        }
     }
 
     @Override
@@ -61,13 +68,17 @@ public class MenuScreen extends BaseScreen {
     }
 
     public void update(float delta) {
-        star.update(delta);
+        for (Star star : starArray) {
+            star.update(delta);
+        }
     }
 
     public void draw() {
         batch.begin();
         background.draw(batch);
-        star.draw(batch);
+        for (Star star : starArray) {
+            star.draw(batch);
+        }
         buttonExit.draw(batch);
         buttonPlay.draw(batch);
         batch.end();
