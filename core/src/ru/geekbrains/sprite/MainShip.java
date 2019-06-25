@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.math.Rect;
+import ru.geekbrains.pool.BulletPool;
 
 public class MainShip extends Sprite {
 
@@ -21,9 +22,13 @@ public class MainShip extends Sprite {
     private int rightPointer = INVALID_POINTER;
 
     private Rect worldBounds;
+    private BulletPool bulletPool;
+    private TextureAtlas atlas;
 
-    public MainShip(TextureAtlas atlas) {
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
+        this.atlas = atlas;
+        this.bulletPool = bulletPool;
         setHeightProportion(0.15f);
     }
 
@@ -59,7 +64,7 @@ public class MainShip extends Sprite {
                 moveRight();
                 break;
             case Input.Keys.UP:
-                frame = 1;
+                shoot();
                 break;
         }
         return false;
@@ -82,7 +87,6 @@ public class MainShip extends Sprite {
                 }
                 break;
             case Input.Keys.UP:
-                frame = 0;
                 break;
         }
         if (!pressedLeft && !pressedRight) {
@@ -127,6 +131,11 @@ public class MainShip extends Sprite {
             }
         }
         return false;
+    }
+
+    public void shoot() {
+        Bullet bullet = bulletPool.obtain();
+        bullet.set(this, atlas.findRegion("bulletMainShip"), pos, new Vector2(0, 0.5f), 0.01f, worldBounds, 1);
     }
 
     private void moveRight() {
