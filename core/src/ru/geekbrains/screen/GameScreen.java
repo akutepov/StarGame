@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.sprite.Background;
+import ru.geekbrains.sprite.MainShip;
 import ru.geekbrains.sprite.Star;
 
 public class GameScreen extends BaseScreen {
@@ -20,6 +21,8 @@ public class GameScreen extends BaseScreen {
 
     private Star[] starArray;
 
+    private MainShip mainShip;
+
     @Override
     public void show() {
         super.show();
@@ -30,6 +33,7 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < starArray.length; i++) {
             starArray[i] = new Star(atlas);
         }
+        mainShip = new MainShip(atlas);
     }
 
     @Override
@@ -43,6 +47,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : starArray) {
             star.update(delta);
         }
+        mainShip.update(delta);
     }
 
     public void draw() {
@@ -51,6 +56,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : starArray) {
             star.draw(batch);
         }
+        mainShip.draw(batch);
         batch.end();
     }
 
@@ -61,6 +67,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : starArray) {
             star.resize(worldBounds);
         }
+        mainShip.resize(worldBounds);
     }
 
     @Override
@@ -72,21 +79,25 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean keyDown(int keycode) {
-        return super.keyDown(keycode);
+        mainShip.keyDown(keycode);
+        return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        return super.keyUp(keycode);
+        mainShip.keyUp(keycode);
+        return false;
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        return super.touchDown(touch, pointer);
+        mainShip.touchDown(touch, pointer);
+        return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
-        return super.touchUp(touch, pointer);
+        mainShip.touchUp(touch, pointer);
+        return false;
     }
 }
