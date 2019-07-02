@@ -6,23 +6,47 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
+import ru.geekbrains.pool.ExplosionPool;
 
 public class Enemy extends Ship {
 
-    public Enemy(BulletPool bulletPool, Sound shootSound, Rect worldBounds) {
+    private enum State { DESCENT, FIGHT }
+
+    private State state;
+
+    private Vector2 descentV = new Vector2(0, -0.15f);
+
+    public Enemy(BulletPool bulletPool, ExplosionPool explosionPool, Sound shootSound, Rect worldBounds) {
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         this.shootSound = shootSound;
         this.worldBounds = worldBounds;
         this.v = new Vector2();
         this.v0 = new Vector2();
         this.bulletV = new Vector2();
+        state = State.DESCENT;
     }
 
     @Override
     public void update(float delta) {
         super.update(delta);
-        if (getBottom() < worldBounds.getBottom()) {
-            destroy();
+        switch (state) {
+            case DESCENT:
+                if (getTop() < worldBounds.getTop()) {
+                    v.set(v0);
+                    state = State.FIGHT;
+                }
+                break;
+            case FIGHT:
+                if (getBottom() < worldBounds.getBottom()) {
+                    destroy();
+                }
+                reloadTimer += delta;
+                if (reloadTimer >= reloadInterval) {
+                    reloadTimer = 0f;
+                    shoot();
+                }
+                break;
         }
     }
 
@@ -46,6 +70,8 @@ public class Enemy extends Ship {
         this.reloadInterval = reloadInterval;
         this.hp = hp;
         setHeightProportion(height);
-        v.set(v0);
+        v.set(descentV);
+        reloadTimer = reloadInterval;
+        state = State.DESCENT;
     }
 }
