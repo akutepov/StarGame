@@ -70,6 +70,10 @@ public abstract class Ship extends Sprite {
         return hp;
     }
 
+    public Vector2 getV() {
+        return v;
+    }
+
     protected void shoot() {
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounds, damage);

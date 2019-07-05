@@ -23,6 +23,7 @@ import ru.geekbrains.sprite.Enemy;
 import ru.geekbrains.sprite.MainShip;
 import ru.geekbrains.sprite.MessageGameOver;
 import ru.geekbrains.sprite.Star;
+import ru.geekbrains.sprite.TrackingStar;
 import ru.geekbrains.utils.EnemyGenerator;
 import ru.geekbrains.utils.Font;
 
@@ -39,7 +40,7 @@ public class GameScreen extends BaseScreen {
     private Background background;
     private TextureAtlas atlas;
 
-    private Star[] starArray;
+    private TrackingStar[] starArray;
 
     private BulletPool bulletPool;
     private EnemyPool enemyPool;
@@ -77,10 +78,7 @@ public class GameScreen extends BaseScreen {
         bg = new Texture("textures/bg.png");
         background = new Background(new TextureRegion(bg));
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
-        starArray = new Star[STAR_COUNT];
-        for (int i = 0; i < starArray.length; i++) {
-            starArray[i] = new Star(atlas);
-        }
+        starArray = new TrackingStar[STAR_COUNT];
         bulletPool = new BulletPool();
         explosionPool = new ExplosionPool(atlas, explosionSound);
         enemyPool = new EnemyPool(bulletPool, explosionPool, bulletSound, worldBounds);
@@ -91,6 +89,9 @@ public class GameScreen extends BaseScreen {
         sbFrags = new StringBuilder();
         sbHp = new StringBuilder();
         sbLevel = new StringBuilder();
+        for (int i = 0; i < starArray.length; i++) {
+            starArray[i] = new TrackingStar(atlas, mainShip.getV());
+        }
         music.setLooping(true);
         music.play();
         state = State.PLAYING;
